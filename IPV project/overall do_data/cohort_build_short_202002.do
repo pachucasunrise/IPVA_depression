@@ -41,13 +41,29 @@ local data_g "`motherq_path'\g_5c"
 local data_h "`motherq_path'\h_6d"
 local data_j "`motherq_path'\j_5b"
 local data_k "`motherq_path'\k_r1b"
+local data_n "`motherq_path'\n_3a"
 local data_l "`motherq_path'\l_r1b"
 local data_p "`motherq_path'\p_r1b"
 local data_r "`motherq_path'\r_r1b"
+local data_s "`motherq_path'\s_r1a"
 local data_t "`motherq_path'\t_2a"
 
 *Partners
 local data_pb "`partnerq_path'\pb_4b"
+local data_pc "`partnerq_path'\pc_3a"
+local data_pd "`partnerq_path'\pd_7b"
+local data_pe "`partnerq_path'\pe_4a"
+local data_pf "`partnerq_path'\pf_r1a"
+local data_pg "`partnerq_path'\pg_2a"
+local data_ph "`partnerq_path'\ph_1c"
+local data_pj "`partnerq_path'\pj_r1a"
+local data_pl "`partnerq_path'\pl_r1b"
+local data_pm "`partnerq_path'\pm_r1b"
+local data_pp "`partnerq_path'\pp_r1b"
+local data_pq "`partnerq_path'\pq_r1a"
+
+*Focus on Fathers (2018... so unlikely to use)
+local data_fa "`partnerq_path'\FA_1b"
 
 *Child-based
 local data_tc "`childb_path'\tc_2a"
@@ -280,7 +296,7 @@ local age "021 017 1821"
 
 *merge 1:1 aln qlet using "`data_YPA'.dta", keep(match)
 #delimit ;
-merge 1:1 aln qlet using "`data_YPA'.dta", keep(match) keepusing(YPA* /*age at completion*/ `var_vic' `var_per' 
+merge 1:1 aln qlet using "`data_YPA'.dta", keep(master match) keepusing(YPA* /*age at completion*/ `var_vic' `var_per' 
 	`var_vic_age' `var_per_age' `impact_neg' `impact_neu' `impact_pos') nogen;
 #delimit cr
 
@@ -319,7 +335,7 @@ foreach v of local var_vic{
 foreach v of local var_per{
 	replace cohort = 1 if `v' > 0 & `v' != .
 	}	
-keep if cohort == 1
+*keep if cohort == 1
 
 numlabel, add force
 * 1 = Never, 2 = Once, 3 = A few times, 4 = Often 
@@ -446,51 +462,73 @@ forvalues i = 1/2{
 ********************************************************************************
 *No need for qlet on mother questionnaires
 
-** ---- B and PB (18w gest): Parental IPVA, partner's highest educational qualification -------------------------------------------------------------------
+** ---- B and PB (18w gest): Parental IPVA (maternal and paternal -reported), partner's highest educational qualification -------------------------------------------------------------------
 local b_dv "b592 b607"
 merge m:1 aln using "`motherq_path'/`data_b'.dta", keep(master match) keepusing(`b_dv') nogen
 local pb_pareduc "pb325 pb325a"
-merge m:1 aln using "`data_pb'.dta", keep(master match) keepusing(`pb_pareduc') nogen
+local pb_dv "pb182 pb182a pb196 pb196a"
+merge m:1 aln using "`data_pb'.dta", keep(master match) keepusing(`pb_pareduc' `pb_dv') nogen
 
-** ---- C (32w gest): Parental IPVA, Mother's highest educational qualification -------------------------------------------------------------------
+** ---- C and PC (32w gest): Parental IPVA (maternal and paternal -reported), Mother's highest educational qualification -------------------------------------------------------------------
 #delimit ;
 local c_dv "c830 c831 c832 c833 c834 c850 c851 c852 c853 c854 c870 c871 c872 c873 c874 
 c891 c892 c893 c894 c910 c911 c912 c913 c914 c930 c931 c932 c933 c934 c951 c952";
 #delimit cr
 local c_pareduc "c645 c645a"
+local pc_dv "pc222 pc222a pc235 pc235a"
 merge m:1 aln using "`motherq_path'/`data_c'.dta", keep(master match) keepusing(`c_dv' `c_pareduc') nogen
+merge m:1 aln using "`data_pc'.dta", keep(master match) keepusing(`pc_dv') nogen
 
-** ---- E (8w): Parental IPVA -------------------------------------------------------------------
+** ---- E (8w): Maternal-reported IPVA -------------------------------------------------------------------
 local e_dv "e422 e437"
 merge m:1 aln using "`data_e'.dta", keep(master match) keepusing(`e_dv') nogen
 
-** ---- F (8m): Parental IPVA -------------------------------------------------------------------
+** ---- F and PD (8m): Parental IPVA (maternal and paternal -reported) -------------------------------------------------------------------
 local f_dv "f242a f256a"
 merge m:1 aln using "`data_f'.dta", keep(master match) keepusing(`f_dv') nogen
+local pd_dv "pd242 pd242a pd256 pd256a"
+merge m:1 aln using "`data_pd'.dta", keep(master match) keepusing(`pd_dv') nogen
 
-** ---- G (1.75y): Parental IPVA -------------------------------------------------------------------
+** ---- G and PE (1.75y): Parental IPVA (maternal and paternal -reported) -------------------------------------------------------------------
 local g_dv "g322a g336a"
 merge m:1 aln using "`data_g'.dta", keep(master match) keepusing(`g_dv' `g_liveswith') nogen
+local pe_dv "pe322 pe322a pe336 pe336a"
+merge m:1 aln using "`data_pe'.dta", keep(master match) keepusing(`pe_dv') nogen
 
-** ---- H (2.75y): Parental IPVA -------------------------------------------------------------------
+** ---- H and PF (2.75y): Parental IPVA (maternal and paternal -reported) -------------------------------------------------------------------
 local h_dv "h232a h246a"
 merge m:1 aln using "`data_h'.dta", keep(master match) keepusing(`h_dv') nogen
+local pf_dv "pf5022 pf5035"
+merge m:1 aln using "`data_pf'.dta", keep(master match) keepusing(`pf_dv') nogen
 
-** ---- J (4y): Parental IPVA -------------------------------------------------------------------
+** ---- J and PG (4y): Parental IPVA (maternal and paternal -reported) -------------------------------------------------------------------
 local j_dv "j322a j336a"
 merge m:1 aln using "`data_j'.dta", keep(master match) keepusing(`j_dv') nogen
+local pg_dv "pg3022 pg3035"
+merge m:1 aln using "`data_pg'.dta", keep(master match) keepusing(`pg_dv') nogen
 
-** ---- K (5y): Parental IPVA, parental education -------------------------------------------------------------------
+** ---- K and PH (5y): Parental IPVA (paternal and maternal -reported) -------------------------------------------------------------------
 local k_dv "k4022 k4036"
 merge m:1 aln using "`data_k'.dta", keep(master match) keepusing(`k_dv') nogen
+local ph_dv "ph4022 ph4036"
+merge m:1 aln using "`data_ph'.dta", keep(master match) keepusing(`ph_dv') nogen
 
-** ---- L (6y): Parental IPVA -------------------------------------------------------------------
+** ---- L and PJ (7y): Parental IPVA (paternal and maternal -reported) -------------------------------------------------------------------
 local l_dv "l4022 l4036"
 merge m:1 aln using "`data_l'.dta", keep(master match) keepusing(`l_dv') nogen
+local pj_dv "pj4022 pj4036"
+merge m:1 aln using "`data_pj'.dta", keep(master match) keepusing(`pj_dv') nogen
 
-** ---- P (9y): Parental IPVA -------------------------------------------------------------------
+** ---- N and PL (8y): Parental IPVA (paternal and maternal -reported) -------------------------------------------------------------------
+*A lot of variables - report on whether they were victimised and whether perpetrated
+merge m:1 aln using "`data_n'.dta", keep(master match) keepusing(n3030-n3059) nogen
+merge m:1 aln using "`data_pl'.dta", keep(master match) keepusing(pl3030-pl3059) nogen
+
+** ---- P and PM (9y): IPVA (maternal and paternal -reported) -------------------------------------------------------------------
 local p_dv "p2022 p2036"
 merge m:1 aln using "`data_p'.dta", keep(master match) keepusing(`p_dv') nogen
+local pm_dv "pm2022 pm2036"
+merge m:1 aln using "`data_pm'.dta", keep(master match) keepusing(`pm_dv') nogen
 
 ** ---- F10 (10.5y): Friends score-------------------------------------------------------------------
 local f10_friend "fdfs120"
@@ -499,9 +537,17 @@ merge m:1 aln qlet using "`data_f10'.dta", keep(master match) keepusing(`f10_fri
 ** ---- F11 (11y clinic) -------------------------------------------------------------------
 *Friendship questions
 
-** ---- R (11y): Parental IPVA -------------------------------------------------------------------
+** ---- R and PP (11y): Parental IPVA (maternal and paternal -reported) -------------------------------------------------------------------
 local r_dv "r5022 r5036"
 merge m:1 aln using "`data_r'.dta", keep(master match) keepusing(`r_dv') nogen
+local pp_dv "pp5022 pp5036"
+merge m:1 aln using "`data_pp'.dta", keep(master match) keepusing(`pp_dv') nogen
+
+** ---- S and PQ (12y): Parental IPVA (maternal and paternal -reported) -------------------------------------------------------------------
+local s_dv "s3153 s3154 s3202 s3211 s3216 s3219"
+merge m:1 aln using "`data_s'.dta", keep(master match) keepusing(`s_dv') nogen
+local pq_dv "pq3153 pq3154 pq3202 pq3211 pq3216 pq3219"
+merge m:1 aln using "`data_pq'.dta", keep(master match) keepusing(`pq_dv') nogen
 
 ** ---- TF1 clinic (12.5y): relationships and RSB -------------------------------------------------------------------
 *Friendship questions
@@ -603,14 +649,14 @@ local ypa_dv "YPA5040 YPA5041 YPA5042 YPA5043 YPA5044 YPA5045 YPA5046 YPA5047 YP
 local ypa_rel "YPA3042 YPA3041"
 local ypa_sexmin "YPA3000"
 local ypa_neet "YPA8000"
-merge 1:1 aln qlet using "`data_YPA'.dta", keep(match) keepusing(`ypa_dv' `ypa_rel' `ypa_sexmin' `ypa_neet') nogen
+merge 1:1 aln qlet using "`data_YPA'.dta", keep(master match) keepusing(`ypa_dv' `ypa_rel' `ypa_sexmin' `ypa_neet') nogen
 
 
 ** ---- YPB (22y): hazardous alcohol use -------------------------------------------------------------------
 local ypb_alc "YPB4388a YPB4388b"
 local ypb_can "YPB4390 YPB4400"
 local ypb_drug "YPB4440 YPB4441 YPB4443 YPB4444 YPB4446 YPB4447 YPB4449 YPB4450 YPB4452 YPB4453 YPB4458 YPB4459 YPB4461 YPB4462 YPB4464 YPB4465 YPB4467"
-merge 1:1 aln qlet using "`data_YPB'.dta", keep(match) keepusing(`ypb_alc' `ypb_can' `ypb_drug') nogen
+merge 1:1 aln qlet using "`data_YPB'.dta", keep(master match) keepusing(`ypb_alc' `ypb_can' `ypb_drug') nogen
 
 
 ** ---- YPC (23y): PTSD, depression (MFQ scores), suicide attempt, NEET -------------------------------------------------------------------
@@ -627,13 +673,13 @@ local ypc_suic "YPC2370"
 
 local ypc_neet "YPC2450 YPC2451 YPC2452 YPC2453 YPC2454 YPC2455 YPC2456 YPC2457 YPC2458 YPC2459 YPC2460 YPC2461"
 
-merge 1:1 aln qlet using "`data_YPC'.dta", keep(match) keepusing(`ypc_ptsd' `ypc_dep' `ypc_dep2' `ypc_suic' `ypc_neet') nogen
+merge 1:1 aln qlet using "`data_YPC'.dta", keep(master match) keepusing(`ypc_ptsd' `ypc_dep' `ypc_dep2' `ypc_suic' `ypc_neet') nogen
 
 
 ** ---- YPD (24y): suicide attempt, eating disorder -------------------------------------------------------------------
 local ypd_suic "YPD1220"
 local ypd_eat "YPD8010 YPD8011 YPD8012 YPD8020 YPD8030 YPD8040 YPD8060 YPD8070 YPD8071"
-merge 1:1 aln qlet using "`data_YPD'.dta", keep(match) keepusing(`ypd_suic' `ypd_eat') nogen
+merge 1:1 aln qlet using "`data_YPD'.dta", keep(master match) keepusing(`ypd_suic' `ypd_eat') nogen
 
 
 ** ---- F24 (24y clinic): Anxiety, depression, suicidal thoughts, psychotic experiences, BMI (to help define eating disorders) -------------------------------------------------------------------
@@ -648,17 +694,16 @@ local f24_alc "FKAL1400 FKAL1410 FKAL1420 FKAL1430 FKAL1440 FKAL1450 FKAL1500"
 local f24_neet "FKFR1300 FKFR1301 FKFR1302 FKFR1303 FKFR1304 FKFR1305"
 
 *Noting that in YPB it's AUDIT, but in F24 it's AUDIT-C?
-merge 1:1 aln qlet using "`data_F24'.dta", keep(match) keepusing(`f24_anx' `f24_dep' `f24_suic' `f24_psych' `f24_bmi' `f24_sleep' `f24_alc' `f24_neet') nogen
+merge 1:1 aln qlet using "`data_F24'.dta", keep(master match) keepusing(`f24_anx' `f24_dep' `f24_suic' `f24_psych' `f24_bmi' `f24_sleep' `f24_alc' `f24_neet') nogen
 
 ** ---- YPE (25y): depression (MFQ scores) -------------------------------------------------------------------
 local ype_dep "YPE4080 YPE4082 YPE4083 YPE4084 YPE4085 YPE4086 YPE4088 YPE4089 YPE4091 YPE4092 YPE4093 YPE4094 YPE4095"
-merge 1:1 aln qlet using "`data_YPE'.dta", keep(match) keepusing(`ype_dep') nogen
+merge 1:1 aln qlet using "`data_YPE'.dta", keep(master match) keepusing(`ype_dep') nogen
 
 
 ** ---- YPF (26y): suicide attempt -------------------------------------------------------------------
 local ypf_suic "YPF6230"
-merge 1:1 aln qlet using "`data_YPF'.dta", keep(match) keepusing(`ypf_suic') nogen
-
+merge 1:1 aln qlet using "`data_YPF'.dta", keep(master match) keepusing(`ypf_suic') nogen
 
 ** ---- Other: ethnicity from schools' data -------------------------------------------------------------------
 merge 1:1 aln qlet using "\\rdsfcifs.acrc.bris.ac.uk\MRC-IEU-research\projects\ieu2\p6\046\working\data\other data\child_ethnicity.dta", keep(master match) keepusing(ethnicity) nogen
@@ -679,7 +724,7 @@ foreach i of local ype_dep{
 ** ---- SES data -------------------------------------------------------------------
 *18w gest (all versions of IMD)
 local imd_G0 "bimd2000q5 bimd2004q5 bimd2007q5 bimd2010q5"
-merge m:1 aln using "Current\Other\Geodata\G0_IMD_1a.dta", keep(master match) keepusing(`imd_G0') nogen
+merge m:1 aln using "Current\Other\Geodata\G0_IMD_1b.dta", keep(master match) keepusing(`imd_G0') nogen
 
 *14y, 16y, 18y, ~20-22y, ~22-24y (all versions of IMD)
 #delimit ;
@@ -689,7 +734,7 @@ cctimd2000q5 cctimd2004q5 cctimd2007q5 cctimd2010q5
 jan2011imd2000q5_YP jan2011imd2004q5_YP jan2011imd2007_incomeq5_YP jan2011imd2010q5_YP 
 jan2014imd2000q5_YP jan2014imd2004q5_YP jan2014imd2007_incomeq5_YP jan2014imd2010q5_YP";
 #delimit cr
-merge 1:1 aln qlet using "Current\Other\Geodata\G1_IMD_1a.dta", keep(master match) keepusing(`imd_G1') nogen
+merge 1:1 aln qlet using "Current\Other\Geodata\G1_IMD_1b.dta", keep(master match) keepusing(`imd_G1') nogen
 
 
 ********************************************************************************
@@ -1444,79 +1489,104 @@ replace drug_ypb = 1 if YPB4441 == 1 | YPB4444 == 1 | YPB4447 == 1 | YPB4450 == 
 * Parental DV
 ********************************************************************************
 
-** ---- Parental IPVA at 18 & 32 weeks gestations (B and C), 8 weeks (E), 8 months (F), ----------------------------------------------------------	
-** ---- 1.75y (G), 2.75y (H), 4y (J), 5y (K), 6y (L), 9y (P), 11y (R), 18y (T), 21y (YPA) -------------------------------------------------------------------	
-gen parent_dv = .
-local var "b592 b607 e422 e437 k4022 k4036 l4022 l4036"
+** ---- Parental IPVA at 18 & 32 weeks gestations (B, PB, C and PC), 
+*8 weeks (E), 8 months (F and PD), 1.75y (G and PE), 2.75y (H and PF), 
+*4y (J and PG), 5y (K and PH), 6y (L and PJ), 8y (N and PL), 
+*9y (P and PM), 11y (R and PP), 12y (S and PQ), 18y (T), 21y (YPA) ---
+gen mum_dv = .
+gen mum_edv = .
+gen mum_pdv = .
+gen part_dv = .
+gen part_edv = .
+gen part_pdv = .
+local var "b607 e437 k4036 l4036"
 foreach v of local var{
-	replace parent_dv=1 if `v'>=1 & `v'<=4
+	replace mum_edv=1 if `v'>=1 & `v'<=4
 	}
-*Leave out code for questionnaire C atm
-local var "f242a f256a g322a g336a h232a h246a j322a j336a t3321 t3335"
-foreach v of local var{
-	replace parent_dv=1 if `v'==1
-	}
-local var "p2022 p2036 r5022 r5036"
-foreach v of local var{
-	replace parent_dv=1 if `v'>=1 & `v'<=3
-	}
-local var "YPA5040 YPA5045 YPA5050 YPA5055"
-foreach v of local var{
-	replace parent_dv=1 if `v'>=2 & `v'<=4
-	}
-tab parent_dv, m
-
-	
-*parent_pdv (physical) 
-gen parent_pdv = .
 local var "b592 e422 k4022 l4022"
 foreach v of local var{
-	replace parent_pdv=1 if `v'>=1 & `v'<=4
+	replace mum_pdv=1 if `v'>=1 & `v'<=4
 	}
-*Leave out code for questionnaire C atm
-local var "f242a g322a h232a j322a t3321"
+local var "pf5035 pg3035 ph4036"
 foreach v of local var{
-	replace parent_pdv=1 if `v'==1
+	replace part_edv=1 if `v'>=1 & `v'<=4
+	}
+local var "pf5022 pg3022 ph4022"
+foreach v of local var{
+	replace part_pdv=1 if `v'>=1 & `v'<=4
+	}
+*Leave out code for questionnaire C atm - things that happened 
+*sexually to mum before they were 16
+
+*N and PL at 8y and S and PQ at 12y are interesting ones... 
+*will share this with the wider group
+
+*Note that in PM is given as 'Father's wife/partner was...'
+
+local var "f256a g336a h246a j336a"
+foreach v of local var{
+	replace mum_edv=1 if `v'==1
+	}
+local var "f242a g322a h232a j322a"
+foreach v of local var{
+	replace mum_pdv=1 if `v'==1
+	}
+local var "pb196a pc235a pd256a pe336a"
+foreach v of local var{
+	replace part_edv=1 if `v'==1
+	}
+local var "pb182a pc222a pd242a pe322a"
+foreach v of local var{
+	replace part_pdv=1 if `v'==1
+	}
+	
+local var "p2036 r5036"
+foreach v of local var{
+	replace mum_edv=1 if `v'>=1 & `v'<=3
 	}
 local var "p2022 r5022"
 foreach v of local var{
-	replace parent_pdv=1 if `v'>=1 & `v'<=3
+	replace mum_pdv=1 if `v'>=1 & `v'<=3
 	}
-replace parent_pdv=1 if YPA5050>=2 & YPA5050<=4
-tab parent_pdv, m
+local var "pm2036 pp5036"
+foreach v of local var{
+	replace part_edv=1 if `v'>=1 & `v'<=3
+	}
+local var "pm2022 pp5022"
+foreach v of local var{
+	replace part_pdv=1 if `v'>=1 & `v'<=3
+	}	
 
-*parent_edv (emotional)
-gen parent_edv = .
-local var "b607 e437 k4022 l4036"
+*Leave out code for questionnaire T and YPA (and FoF) atm 
+*- things that happened to either mum or partner after G1 turned 18
+/*
+*t3321 t3335
+local var "YPA5040 YPA5045 YPA5050 YPA5055"
 foreach v of local var{
-	replace parent_edv=1 if `v'>=1 & `v'<=4
+	replace mum_dv=1 if `v'>=2 & `v'<=4
 	}
-*Leave out code for questionnaire C atm
-local var "f256a g322a h232a j336a t3335"
+*/
+replace mum_dv = 1 if mum_edv == 1 | mum_pdv == 1
+replace part_dv = 1 if part_edv == 1 | part_pdv == 1
+local var "mum_dv mum_edv mum_pdv part_dv part_edv part_pdv"
 foreach v of local var{
-	replace parent_edv=1 if `v'==1
+	tab `v', m
 	}
-local var "p2036 r5036"
-foreach v of local var{
-	replace parent_edv=1 if `v'>=1 & `v'<=3
-	}
-local var "YPA5040 YPA5045 YPA5055"
-foreach v of local var{
-	replace parent_edv=1 if `v'>=2 & `v'<=4
-	}
-tab parent_edv, m
+tab mum_edv mum_pdv
+tab part_edv part_pdv
+*So before 18, about 25% mum dv, 24% emotional, 8% physical, 7% (227/3280) both
+*20% partner dv, 17% emotional, 7% physical, 5% (152/3280) both
 
-tab parent_pdv parent_edv, m
-*So far about 43% parental dv, 12% physical, 40% emotional, 11% both
 
 ********************************************************************************
 * Save data as 'IPVA_cohort' in our shared directory so I can run analyses directly.  
 ********************************************************************************
 
 *Education only available via anonymous data
-keep if cohort == 1
 #delimit ;
 keep aln qlet kz021_new
+YPA0001
+cohort
 vic* per* impact* 
 YPA5020 YPA5021 YPA5022 YPA5024 YPA5025 YPA5028 YPA5029 YPA5023 YPA5026 YPA5027
 `var_vic' `var_vic_age' `var_per' `var_per_age'
@@ -1546,6 +1616,9 @@ foreach v of local var{
 	rename `v' `name'
 	}
 
+save "\\rdsfcifs.acrc.bris.ac.uk\MRC-IEU-research\projects\ieu2\p6\046\working\data\cohort\ALSPAC_age21.dta", replace	
+keep if cohort == 1
+drop cohort
 save "\\rdsfcifs.acrc.bris.ac.uk\MRC-IEU-research\projects\ieu2\p6\046\working\data\cohort\current_IPVA_cohort_id.dta", replace
 export excel using "\\rdsfcifs.acrc.bris.ac.uk\MRC-IEU-research\projects\ieu2\p6\046\working\data\cohort\current_IPVA_cohort_id.xls", replace firstrow(varlabels)
 
