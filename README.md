@@ -1,11 +1,10 @@
 *28.01.20
 *annie.herbert@bristol.ac.uk
 
-Running everything for depression paper from beginning to end
-- 1_cohort_build_short_202002 pulls variables out from ALSPAC drive and 
-creates Stata dataset 'current_IPVA_cohort_id.dta'
+These are R scripts to prepare and analyse data for the manuscript 'Establishing the causal role of intimate partner violence and abuse on depressive symptoms in young adults: a population-based cohort study', which is currently in submission with IJE.
 
-- 2_data_prep_for_imp takes 'current_IPVA_cohort_id.dta' and updates the 
+Running everything for depression paper from beginning to end
+- data_prep_for_imp takes 'current_IPVA_cohort_id.dta' and updates the 
 list of auxilliary vars so none used to derive ACES that have sparse levels 
 (n<50) are used and where possible binary versions are used instead (as per 
 Lotte's ACE scripts). Also recodes some vars where needed, and creates lists
@@ -18,21 +17,14 @@ main analysis) and relationship status by age 17 (one of our sensitivity/
 generalisability analyses), later. At the end just tests how long one 
 imptuation is likely to take. Produces R object 'data_for_imputation.RData'.
 
-- 3_imp.sh this runs file imputation.R in Blue Crystal (HPC), which carries 
-out 14 different imputations (girls, boys, raw MFQ, log, long format, DID, 
-etc.) and saves each as an individual dataset (this is to ensure that 
-datasets produced so far are saved if Blue Crystal (HPC) times out.
-Requires 3_imp.sh and data_for_imputation.RData to be saved in Blue 
-Crystal, then just enter 'qsub 3_imp.sh'.
-
-- 4_data_prep_for_analysis.R takes the original data, and the mids objects 
+- data_prep_for_analysis.R takes the original data, and the mids objects 
 resulting from running imputation.R in Blue Crystal (HPC), 
 manipulates certain vars, and re-saves. E.g. main analysis datasets (so 
 removes those who have been exposed to IPVA by age 17 and specific datasets 
 for sensitivity/generalisability analyses such as taking those who have 
 definitely been in a romantic relationship by age 17.
 
-- 5_analysis.R then runs all analyses needed for the paper, producing excel 
+- analysis.R then runs all analyses needed for the paper, producing excel 
 files that get pasted into tables.xls to produce Tables 1-5 and Supp Tables 
 S1-S5, as well as figures 1, 2, S1, and S2 (all of these outputs are in the 
 'P3 - Mental health/results' folder).
