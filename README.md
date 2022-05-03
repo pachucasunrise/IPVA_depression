@@ -1,7 +1,7 @@
 *28.01.20
 *annie.herbert@bristol.ac.uk
 
-These are R scripts to prepare and analyse data for the manuscript 'Establishing the causal role of intimate partner violence and abuse on depressive symptoms in young adults: a population-based cohort study', which is currently in submission with IJE.
+These are R scripts to prepare and analyse data for the manuscript 'Establishing the causal role of intimate partner violence and abuse on depressive symptoms in young adults: a population-based cohort study'
 
 Running everything for depression paper from beginning to end
 - data_prep_for_imp takes 'current_IPVA_cohort_id.dta' and updates the 
@@ -40,6 +40,7 @@ Requires R functions saved as:
 	categorical (not binary; e.g. vic subtypes), and outputs estimates 
 	to a table)
 
-
+May 2022:
+This study has now been published in BMC Medicine: https://bmcmedicine.biomedcentral.com/articles/10.1186/s12916-021-02182-3
 
 
